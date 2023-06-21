@@ -1,0 +1,206 @@
+.container-kanban {
+    width: 100%;
+    height: 100vh;
+    min-width: 50%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #333333;
+}
+
+.inside .container-kanban {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.btn-gris {
+    position: relative;
+    display: inline-block;
+    border: none;
+    padding: 0 10px;
+    border-radius: 5px;
+    background-color: #454545;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(30, 30, 30, 0.8);
+    color: #ccc;
+    margin: 0, 2px;
+    height: 32px;
+    transition: background-color 0.2s;
+}
+
+.btn-gris:hover {
+    background-color: #565656;
+}
+.btn-borrar {
+    width: 30%;
+    background: #cc0a0a;
+    color: #e4e4e4;
+    border-radius: 5px;
+    border: 0;
+    outline: none;
+    font-size: 1.1rem;
+    margin: 0.3rem;
+    transition: 0.5s;
+
+}
+
+.btn-borrar:hover {
+    background: #820707;
+    transition: 0.5s;
+    box-shadow: 2px 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-crear {
+    width: 30%;
+    background: green;
+    color: #e4e4e4;
+    border-radius: 5px;
+    border: 0;
+    outline: none;
+    font-size: 1.1rem;
+    margin: 0.3rem;
+    transition: 0.5s;
+
+}
+
+.btn-crear:hover {
+    background: greenyellow;
+    transition: 0.5s;
+    box-shadow: 2px 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+.kanban-p {
+    color: #e70;
+    font-family: 'noto', sans-serif;
+    font-weight: 400;
+    line-height: 32px;
+    font-size: 1.4em;
+
+}
+
+
+.kanban-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+    margin: 0.2rem;
+    width: 30.5%;
+    min-width: 14rem;
+    min-height: 4.5rem;
+    font-family: 'noto', sans-serif;
+    
+    height: 100%;
+}
+
+.kanban-form {
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    background-color: #018b01;
+    align-items: center;
+    font-family: sans-serif;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-radius: 0.5rem;
+    box-shadow: 2px 2px 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+
+.pendiente {
+    /* height: fit-content; */
+    /* background-color: #fec6d1; */
+    color: rgb(136, 136, 136);
+    font-family: 'noto', sans-serif;
+    border-bottom: 4px solid rgb(136, 136, 136);
+}
+
+.progreso {
+    color: rgb(39, 128, 227);
+    font-family: 'noto', sans-serif;
+    border-bottom: 4px solid rgb(39, 128, 227);
+}
+
+.completado {
+    color: rgb(63, 182, 24);
+    font-family: 'noto', sans-serif;
+    border-bottom: 4px solid rgb(63, 182, 24);
+}
+
+.prueba {
+    color: rgb(233, 38, 43);
+    font-family: 'noto', sans-serif;
+    border-bottom: 4px solid rgb(233, 38, 43);
+}
+
+.tarea {
+    padding: 0.1rem;
+    width: 100%;
+    text-align: start;
+    background-color: #454545;
+    margin: 0.2rem 0rem 0.3rem 0rem;
+    border: 0.1rem solid #2d2d2d;
+    border-radius: 0.5rem;
+}
+.tarea:hover{
+    background-color: #565656;
+}
+
+.tarea p {
+    color: #ccc !important;
+    font-family: 'noto', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+.task {
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: move;
+}
+.task-placeholder {
+    background-color: transparent;
+    opacity: 0.5;
+    border: 1px dashed #aaa;
+}
+.task-dragging {
+    opacity: 0.5;
+    position: absolute;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.custom-modal {
+    background-color: #42414d;
+    color: #ccc;
+
+}
+
+
+.custom-modal .form-control {
+    background-color: #101204 !important;
+    color: #ccc;
+    border: 0.1rem solid #2d2d2d;
+    border-radius: 0.5rem;
+}
+
+.custom-modal .form-control:focus {
+    color: #ccc;
+    border: 0.1rem solid #e70;
+    box-shadow: none;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+}
+.id-tarea{
+    text-align: end;
+}
+.inside{
+    margin: 0 !important;
+    padding: 0 !important;
+}
