@@ -18,8 +18,10 @@ define('LES_REALPATH_BASENAME_PLUGIN', dirname(plugin_basename(__FILE__)) . '/')
 define('LES_PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
 //proporciona la URL accesible desde el navegador web
 define('LES_PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
-//define el nombre de la tabla, en este caso "a-kanban".
+//define el nombre de la tabla, en este caso "a-kanban".//!PRUEBAS
 define('LES_TABLE', "{$wpdb->prefix}a_kanban"); 
+//define el nombre de la tabla del kanban 
+define('LES_TABLE_KANBAN',"{$wpdb->prefix}_a_kanban"); 
 
 //Funcion para activar un pluging
 function les_activate()

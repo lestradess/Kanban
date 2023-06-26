@@ -27,3 +27,4 @@ wp-includes/
 /wp-content/plugins/les-kanban/helpers/bootstrap-5.3.0
 *.zip
 /wp-content/plugins/les-kanban/aborrar
+/nbproject/private/

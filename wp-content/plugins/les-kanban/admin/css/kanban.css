@@ -1,3 +1,17 @@
+:root {
+    /* Kanban***************************/
+    --font-first: #a2adb9;
+    --font-second: #5e6c84;
+    --fond-columns: #101204;
+    --fond-kanban: #333333;
+    /* Modal ************************* */
+    --fondo-modal: #333333;
+    --fondo-input: #454545;
+    --fondo-input-hover: #565656;
+    --fondo-oscuro: #1d2327;
+    --boton: #454545;
+}
+
 .container-kanban {
     width: 100%;
     height: 100vh;
@@ -5,7 +19,7 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    background-color: #333333;
+    background-color: var(--fond-kanban);
 }
 
 .inside .container-kanban {
@@ -17,66 +31,30 @@
     position: relative;
     display: inline-block;
     border: none;
+    font-size: medium;
+    font-weight: bold;
     padding: 0 10px;
     border-radius: 5px;
-    background-color: #454545;
-    cursor: pointer;
+    background-color: var(--boton);
     box-shadow: 0 1px 4px rgba(30, 30, 30, 0.8);
-    color: #ccc;
+    color: var(--font-first);
     margin: 0, 2px;
     height: 32px;
     transition: background-color 0.2s;
 }
 
 .btn-gris:hover {
-    background-color: #565656;
-}
-.btn-borrar {
-    width: 30%;
-    background: #cc0a0a;
-    color: #e4e4e4;
-    border-radius: 5px;
-    border: 0;
-    outline: none;
-    font-size: 1.1rem;
-    margin: 0.3rem;
-    transition: 0.5s;
-
+    background-color: var(--fondo-input-hover);
 }
 
-.btn-borrar:hover {
-    background: #820707;
-    transition: 0.5s;
-    box-shadow: 2px 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn-crear {
-    width: 30%;
-    background: green;
-    color: #e4e4e4;
-    border-radius: 5px;
-    border: 0;
-    outline: none;
-    font-size: 1.1rem;
-    margin: 0.3rem;
-    transition: 0.5s;
-
-}
-
-.btn-crear:hover {
-    background: greenyellow;
-    transition: 0.5s;
-    box-shadow: 2px 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
 .kanban-p {
     color: #e70;
     font-family: 'noto', sans-serif;
     font-weight: 400;
     line-height: 32px;
-    font-size: 1.4em;
-
+    font-size: 1.6em;
+    font-weight: bold;
 }
-
 
 .kanban-block {
     display: flex;
@@ -90,7 +68,6 @@
     min-width: 14rem;
     min-height: 4.5rem;
     font-family: 'noto', sans-serif;
-    
     height: 100%;
 }
 
@@ -107,62 +84,68 @@
     box-shadow: 2px 2px 2px 4px rgba(255, 255, 255, 0.1);
 }
 
-
-.pendiente {
-    /* height: fit-content; */
-    /* background-color: #fec6d1; */
-    color: rgb(136, 136, 136);
+.kanban-column {
     font-family: 'noto', sans-serif;
-    border-bottom: 4px solid rgb(136, 136, 136);
+    font-size: 1.6em;
+    font-weight: bold;
 }
 
+.pendiente {
+    color: #ca4552;
+    border-bottom: 4px solid #ca4552;
+}
+
+
 .progreso {
-    color: rgb(39, 128, 227);
-    font-family: 'noto', sans-serif;
-    border-bottom: 4px solid rgb(39, 128, 227);
+    color: #50af3c;
+    border-bottom: 4px solid #50af3c;
 }
 
 .completado {
-    color: rgb(63, 182, 24);
-    font-family: 'noto', sans-serif;
-    border-bottom: 4px solid rgb(63, 182, 24);
+    color: #b3acd6;
+    border-bottom: 4px solid #b3acd6;
 }
 
 .prueba {
-    color: rgb(233, 38, 43);
-    font-family: 'noto', sans-serif;
-    border-bottom: 4px solid rgb(233, 38, 43);
+    color: #d1b648;
+    border-bottom: 4px solid #d1b648;
 }
 
 .tarea {
     padding: 0.1rem;
     width: 100%;
     text-align: start;
-    background-color: #454545;
-    margin: 0.2rem 0rem 0.3rem 0rem;
-    border: 0.1rem solid #2d2d2d;
+    background-color: var(--boton);
+    margin: 0.3rem 0.2rem 0.3rem 0.2rem;
+    border: 0.1rem solid var(--fondo-modal);
     border-radius: 0.5rem;
 }
-.tarea:hover{
-    background-color: #565656;
+
+.tarea:hover {
+    background-color: var(--fondo-input-hover);
 }
 
 .tarea p {
-    color: #ccc !important;
+    color: var(--font-first) !important;
     font-family: 'noto', sans-serif;
+    font-size: 1.3em;
+    font-weight: bold;
     padding: 0;
-    margin: 0;
+    margin: 0.4rem;
 }
+
 .task {
     padding: 10px;
     margin-bottom: 5px;
     cursor: move;
 }
+
 .task-placeholder {
     background-color: transparent;
     opacity: 0.5;
     border: 1px dashed #aaa;
 }
+
 .task-dragging {
     opacity: 0.5;
     position: absolute;
@@ -171,36 +154,79 @@
 }
 
 .custom-modal {
-    background-color: #42414d;
-    color: #ccc;
+    background-color: var(--fondo-modal);
+    color: var(--font-first);
 
 }
 
+.custom-modal .form-control::placeholder {
+    font-weight: 500;
+    color: var(--font-second) !important;
+
+}
 
 .custom-modal .form-control {
-    background-color: #101204 !important;
-    color: #ccc;
-    border: 0.1rem solid #2d2d2d;
+    font-weight: bold;
+    font-size: large;
+    background-color: var(--fondo-input);
+    color: var(--font-first);
+    border: 0.1rem solid var(--fondo-modal);
     border-radius: 0.5rem;
 }
 
 .custom-modal .form-control:focus {
+    background-color: #101204 !important;
     color: #ccc;
-    border: 0.1rem solid #e70;
     box-shadow: none;
 }
 
-.modal-header {
-    border-bottom: none;
+.custom-modal label {
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 1rem 0.3rem 0;
+}
+
+#tarea-nombre {
+    font-weight: bold;
+    font-size: 1.8em;
+    background-color: var(--fondo-modal);
 }
 
 .modal-footer {
     border-top: none;
 }
-.id-tarea{
-    text-align: end;
-}
-.inside{
+
+.inside {
     margin: 0 !important;
     padding: 0 !important;
+}
+
+.custom-checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    transform: scale(2);
+    outline: none;
+    background-color: var(--fondo-input);
+    border: 1px solid var(--fondo-input);
+    outline: none;
+    /* Elimina el contorno al enfocar el checkbox */
+    cursor: pointer;
+    /* Muestra el cursor como un puntero al pasar por encima del checkbox */
+}
+
+.custom-checkbox:not(:checked) {
+    background-color: var(--fondo-input);
+    border-radius: 3px;
+    border-color: var(--fondo-input);
+    border: 1px solid var(--fondo-input);
+}
+
+.custom-checkbox::before {
+    background-color: var(--fondo-modal);
+    border:none;
+}
+.custom-checkbox::focus {
+    background-color: var(--fondo-oscuro);
+    border: none;
 }

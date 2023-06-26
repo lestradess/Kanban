@@ -3,7 +3,7 @@ function les_mtb_kanban_add()
 {
     add_meta_box(
         'les_mtb_kanban', // ID del metabox
-        'Nombre del Tablero: ', // Título del metabox
+        ' ', // Título del metabox
         'les_mtb_kanban_callback', // Función que se encarga de mostrar el contenido del metabox
         'les_kanban', // Tipo de contenido (slug del padre)al que se debe aplicar el metabox
         'normal', // Contexto del metabox (puede ser 'normal', 'advanced' o 'side')

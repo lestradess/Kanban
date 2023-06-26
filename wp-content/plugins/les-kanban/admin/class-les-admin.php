@@ -107,7 +107,7 @@ class LES_Admin
          *
          */
         wp_localize_script(
-            $this->plugin_name,
+            'admin-script',
             'lesdata',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
