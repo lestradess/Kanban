@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-06-30T13:46:59.931Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.3.7 Chrome/112.0.5615.204 Electron/24.5.0 Safari/537.36" etag="gcYJs4_2WThrYe8jCVFl" version="21.3.7" type="device" pages="4">
+<mxfile host="Electron" modified="2023-06-30T13:46:50.557Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.3.7 Chrome/112.0.5615.204 Electron/24.5.0 Safari/537.36" etag="DA8pifc4VqAWZRhHvHlB" version="21.3.7" type="device" pages="4">
   <diagram id="punyJdf-jIbUqmlF7vAM" name="Página-4">
-    <mxGraphModel dx="5176" dy="4592" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1200" pageHeight="1920" math="0" shadow="0">
+    <mxGraphModel dx="2394" dy="2048" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1200" pageHeight="1920" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -762,6 +762,11 @@
         </mxCell>
         <mxCell id="ij2Dm8SQ9CkHd_1CGwGM-244" value="SIN HACER" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;fontFamily=Helvetica;fontSize=14;fillColor=#f0a30a;strokeColor=#BD7000;fontColor=#000000;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="-20" y="-340" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="iMMn_ZPk_lvDpZwo16x_-23" value="div" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;labelBackgroundColor=none;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;fontFamily=Helvetica;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="-1110" y="-780" width="240" height="96" as="geometry">
+            <mxRectangle y="104" width="240" height="26" as="alternateBounds" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="iMMn_ZPk_lvDpZwo16x_-24" value="FUNCIÓN" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=16;startSize=30;fillColor=#008a00;strokeColor=#005700;strokeWidth=2;fontColor=#ffffff;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" parent="1" vertex="1">
           <mxGeometry x="2840" y="-200" width="510" height="370" as="geometry">

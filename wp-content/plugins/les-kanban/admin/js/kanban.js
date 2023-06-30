@@ -5,6 +5,12 @@ $ = jQuery.noConflict();
 let arrTareas = [];
 let arrSubtareas = [];
 let btnEliminar;
+let objTableros = {
+    "pendientes": 0,
+    "progreso": 0,
+    "pruebas": 0,
+    "completados": 0
+};
 
 //Si LocalStorage está definido
 if (typeof localStorage !== 'undefined') {
@@ -56,15 +62,19 @@ document.addEventListener('DOMContentLoaded', function () {
             start: function (event, ui) {
                 ui.placeholder.height(ui.item.height());
                 ui.item.addClass("task-dragging");
-
+                const tablero = ui.item.parent().attr("id");
+                console.log(`cojo del tablero ${ tablero }`);
+                tableros(tablero,-1);
             },
             stop: function (event, ui) {
                 ui.item.removeClass("task-dragging");
                 const id = ui.item[ 0 ].id;
-                const actualizarTarea = buscarTarea(id);
-                if (actualizarTarea) {
-                    actualizarTarea.tablero = ui.item.parent().attr("id");
-                    console.log(`tarea ${ actualizarTarea.nombre } movida a tablero ${ ui.item.parent().attr("id") }`);
+                const tarea = buscarTarea(id);
+                if (tarea) {
+                    const tablero = ui.item.parent().attr("id");
+                    console.log(`pongo la tarea ${ tarea.nombre } en el tablero ${ tablero }`);                
+                    tarea.tablero = tablero;
+                    tableros(tablero, 1);
                     guardarTarea();
                 }
             }
@@ -80,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     inicializarTareas();
 });
+
 
 function nuevaTarea (e) {
     console.log('Nueva tarea');
@@ -98,7 +109,6 @@ function crearDivTarea (id) {
     if (buscarDivTarea) {
         buscarDivTarea.remove();
     }
-
     const tarea = buscarTarea(id);
     console.log(tarea);
     console.log(tarea.subTareas);
@@ -121,6 +131,11 @@ function crearDivTarea (id) {
     pNombre.setAttribute('id', 'nombre');
     pNombre.textContent = tarea.nombre;
     divTarea.appendChild(pNombre);
+
+    const posicion = document.createElement('p');
+    posicion.className = 'col';
+    posicion.textContent = tarea.posicion;
+    divTarea.appendChild(posicion);
 
     const divCheck = document.createElement("div");
     if (tarea.subTareas) {
@@ -156,6 +171,7 @@ function crearDivTarea (id) {
     }
     divTarea.appendChild(divCheck);
     tablero.appendChild(divTarea);
+    tableros(tableroId, 1);
 }
 
 //:Funcion de creacción de tarea dentro del modal********
@@ -453,4 +469,19 @@ function urlSubtarea (e, div = null, urL = null) {
 function buscarTarea (id) {
     const tarea = arrTareas.find(t => String(t.id) === String(id));
     return tarea;
+}
+function tableros (tableroid, suma) {
+    console.log('Tablero')
+    const tablero = document.getElementById(tableroid);
+    console.log(tablero)
+    const nomTablero = tableroid;
+    console.log(nomTablero)
+    const cant = tablero.querySelector(".nTareas");
+    console.log(cant.innerHTML)
+    if (suma > 0) {
+        objTableros[ nomTablero ]++;
+    }else{
+        objTableros[ nomTablero ]--;
+    } 
+    cant.innerHTML = objTableros[ nomTablero ];
 }
