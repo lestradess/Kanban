@@ -102,8 +102,8 @@
 }
 
 .completado {
-    color: #b3acd6;
-    border-bottom: 4px solid #b3acd6;
+    color: #0c63e4;
+    border-bottom: 4px solid #0c63e4;
 }
 
 .prueba {
@@ -205,10 +205,10 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    transform: scale(2);
+    transform: scale(2.3);
     outline: none;
+    border: none;
     background-color: var(--fondo-input);
-    border: 1px solid var(--fondo-input);
     outline: none;
     /* Elimina el contorno al enfocar el checkbox */
     cursor: pointer;
@@ -217,9 +217,7 @@
 
 .custom-checkbox:not(:checked) {
     background-color: var(--fondo-input);
-    border-radius: 3px;
-    border-color: var(--fondo-input);
-    border: 1px solid var(--fondo-input);
+    border: none;
 }
 
 .custom-checkbox::before {
@@ -229,4 +227,21 @@
 .custom-checkbox::focus {
     background-color: var(--fondo-oscuro);
     border: none;
+}
+.custom-menu{
+    background-color: var(--fondo-input);
+}
+.custom-menu .dropdown-item{
+    color: var(--font-first);
+}
+.custom-menu .dropdown-item:hover {
+    background-color: var(--fondo-input-hover);
+    /* Cambia el color de fondo al pasar el cursor por encima */
+    color: white ;
+    
+}
+.subtarea{
+    border: 1px solid var(--fondo-oscuro);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
 }

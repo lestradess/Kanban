@@ -2,9 +2,8 @@
 //:VARIABLES**************************
 $ = jQuery.noConflict();
 
-let tareaActual = {};
 let arrTareas = [];
-
+let arrSubtareas = [];
 let btnEliminar;
 
 //Si LocalStorage está definido
@@ -57,14 +56,17 @@ document.addEventListener('DOMContentLoaded', function () {
             start: function (event, ui) {
                 ui.placeholder.height(ui.item.height());
                 ui.item.addClass("task-dragging");
+
             },
             stop: function (event, ui) {
                 ui.item.removeClass("task-dragging");
-                tareaActual.id = ui.item[ 0 ].id;
-                const actualizarTarea = arrTareas.find(t => t.id === tareaActual.id);
-                actualizarTarea.tablero = ui.item.parent().attr("id");
-                guardarTarea();
-                console.log(`tarea ${ actualizarTarea.nombre } movida a tablero ${ ui.item.parent().attr("id") }`);
+                const id = ui.item[ 0 ].id;
+                const actualizarTarea = buscarTarea(id);
+                if (actualizarTarea) {
+                    actualizarTarea.tablero = ui.item.parent().attr("id");
+                    console.log(`tarea ${ actualizarTarea.nombre } movida a tablero ${ ui.item.parent().attr("id") }`);
+                    guardarTarea();
+                }
             }
         });
     });
@@ -73,107 +75,11 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('inicializando tareas');
         //posicionarCabecera();
         arrTareas.forEach(function (tarea) {
-
-            crearDivTarea(tarea, true);
-
+            crearDivTarea(tarea.id);
         });
     }
     inicializarTareas();
-
-    //funcion para mover el input dentro del metabox
-    function posicionarCabecera () {
-        const input = document.getElementById('title');
-        input.className = "col ms-3";
-        const divTitle = document.querySelector('#titlewrap');
-        divTitle.className = "row";
-        const btnSave = document.createElement("button");
-        btnSave.id = "save-post-button";
-        btnSave.className = "btn btn-primary col-1 ms-2 me-3";
-        btnSave.type = "submit";
-        btnSave.textContent = "Actualizar";
-        //divNuevo.className = "row p-2";
-        divTitle.appendChild(btnSave);
-    }
 });
-
-
-
-function crearDivTarea (tarea, guardada = false) {
-    console.log('Crear tarjeta');
-
-    const tablero = document.getElementById(tarea.tablero);
-
-    const divTarea = document.createElement('div');
-    divTarea.className = 'tarea p-1 row task';
-    divTarea.setAttribute('id', tarea.id);
-    divTarea.setAttribute('draggable', true);
-    divTarea.setAttribute('ondragstart', 'drag(event)');
-
-    divTarea.onclick = function (e) {
-        e.preventDefault();
-        tarea.id = divTarea.getAttribute('id');
-        tarea.fecha = formatearFecha(tarea.id);
-        tarea.nombre = pNombre.textContent;
-        tarea.descripcion = pDescripcion.textContent;
-        tarea.responsable = pResponsable.textContent;
-        rellenarCampos(tarea);
-    };
-    const pNombre = document.createElement('p');
-    pNombre.className = 'col';
-    pNombre.setAttribute('id', 'nombre');
-    pNombre.textContent = tarea.nombre;
-
-    const pDescripcion = document.createElement('p');
-    pDescripcion.className = 'col';
-    pDescripcion.setAttribute('id', 'descripcion');
-    pDescripcion.textContent = tarea.descripcion;
-
-    const pResponsable = document.createElement('p');
-    pResponsable.className = 'col';
-    pResponsable.setAttribute('id', 'responsable');
-    pResponsable.textContent = tarea.responsable;
-
-    //divTarea.appendChild(pFecha)
-    divTarea.appendChild(pNombre);
-    divTarea.appendChild(pDescripcion),
-        //divTarea.appendChild(pResponsable)
-
-        tablero.appendChild(divTarea);
-    //*GUARDAR TAREA EN ARRAY
-    if (!guardada) {
-        arrTareas.push(tarea);
-        guardarTarea();
-    }
-}
-//:Funcion de creacción de tarea dentro del modal********
-function crearEditarTarea () {
-    console.log('Crear/Editar Tarea');
-    const divTarea = document.getElementById(tareaActual.id);
-
-    if (divTarea) {
-        divTarea.childNodes[ 0 ].textContent = document.getElementById("tarea-nombre").value;
-        divTarea.childNodes[ 1 ].textContent = document.getElementById("tarea-descripcion").value;
-        btnEliminar.classList.remove("d-none");
-        const actualizarTarea = arrTareas.find(t => t.id === tareaActual.id);
-        if (actualizarTarea) {
-            actualizarTarea.nombre = document.getElementById("tarea-nombre").value;
-            actualizarTarea.descripcion = document.getElementById("tarea-descripcion").value;
-            cerrarModal();
-        } else {
-            console.log("tarea no encontrada");
-        }
-    } else {
-        let tarea = {};
-        tarea.id = crearId();
-        tarea.tablero = "pendientes";
-        tarea.nombre = document.getElementById("tarea-nombre").value;
-        tarea.descripcion = document.getElementById("tarea-descripcion").value;
-        tarea.responsable = document.getElementById("tarea-responsable").value;
-        crearDivTarea(tarea);
-        cerrarModal();
-    }
-    
-}
 
 function nuevaTarea (e) {
     console.log('Nueva tarea');
@@ -182,79 +88,214 @@ function nuevaTarea (e) {
     limpiarCampos();
     const id = crearId();
     document.getElementById("tarea-fecha").textContent = 'Fecha: ' + formatearFecha(id);
-    document.getElementById("tarea-id").textContent = id;
-    tareaActual.id = id;
+    document.getElementById("tarea-id").textContent = String(id);
+    document.getElementById("tarea-tablero").textContent = 'Pendientes';
 }
+
+function crearDivTarea (id) {
+    console.log('Crear Div Tarea');
+    const buscarDivTarea = document.getElementById(id);
+    if (buscarDivTarea) {
+        buscarDivTarea.remove();
+    }
+
+    const tarea = buscarTarea(id);
+    console.log(tarea);
+    console.log(tarea.subTareas);
+    const tableroId = tarea.tablero.toLowerCase();
+    const tablero = document.getElementById(tableroId);
+
+    const divTarea = document.createElement('div');
+    divTarea.className = 'tarea p-0 row task';
+    divTarea.setAttribute('id', tarea.id);
+    divTarea.setAttribute('draggable', true);
+    divTarea.setAttribute('ondragstart', 'drag(event)');
+
+    divTarea.onclick = function (e) {
+        e.preventDefault();
+        console.log('tarea desde onclick')
+        rellenarCampos(tarea.id);
+    };
+    const pNombre = document.createElement('p');
+    pNombre.className = 'col';
+    pNombre.setAttribute('id', 'nombre');
+    pNombre.textContent = tarea.nombre;
+    divTarea.appendChild(pNombre);
+
+    const divCheck = document.createElement("div");
+    if (tarea.subTareas) {
+        if (tarea.subTareas.length > 0) {
+            const subtareas = tarea.subTareas;
+            subtareas.forEach(function (subtarea) {
+                console.log(subtarea);
+                const subtareaP = document.createElement("p");
+                const subtareaText = document.createElement("span");
+                subtareaText.textContent = subtarea.nombre;
+                const checkSpan = document.createElement("span");
+                const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+                svgElement.setAttribute("width", "32");
+                svgElement.setAttribute("height", "32");
+                svgElement.setAttribute("fill", "currentColor");
+                svgElement.setAttribute("class", "bi bi-check2");
+                svgElement.setAttribute("viewBox", "0 0 16 16");
+                const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                pathElement.setAttribute("d", "M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0");
+                pathElement.setAttribute("fill", "transparent");
+                if (subtarea.check) {
+                    subtareaText.classList.add('text-decoration-line-through');
+                    pathElement.setAttribute("fill", "#3582c4");
+                }
+                svgElement.appendChild(pathElement);
+                checkSpan.appendChild(svgElement);
+                subtareaP.appendChild(checkSpan);
+                subtareaP.appendChild(subtareaText);
+                divCheck.appendChild(subtareaP);
+            });
+        }
+    }
+    divTarea.appendChild(divCheck);
+    tablero.appendChild(divTarea);
+}
+
+//:Funcion de creacción de tarea dentro del modal********
+function crearEditarTarea (tarea) {
+    console.log('Crear/Editar Tarea');
+    const divTarea = document.getElementById(tarea.id);
+
+    if (divTarea) {
+        btnEliminar.classList.remove("d-none");
+        const actualizarTarea = buscarTarea(tarea.id);
+        if (actualizarTarea) {
+            const indice = arrTareas.indexOf(actualizarTarea);
+            arrTareas.splice(indice, 1, tarea);
+        }
+        guardarTarea();
+        crearDivTarea(tarea.id);
+        cerrarModal();
+
+    } else {
+        guardarTarea(tarea);
+        crearDivTarea(tarea.id);
+        cerrarModal();
+    }
+
+}
+
+function recogerDatos () {
+    console.log('Recoger datos');
+    let tarea = {};
+    tarea.fecha = document.getElementById("tarea-fecha").textContent;
+    tarea.tablero = document.getElementById("tarea-tablero").textContent;
+    tarea.id = document.getElementById("tarea-id").textContent;
+    tarea.nombre = document.getElementById("tarea-nombre").value;
+    const descripcion = document.getElementById("tarea-descripcion");
+    tarea.descripcion = descripcion.value ? descripcion.value : 'Sin descripción';
+    const responsable = document.getElementById("tarea-responsable")
+    tarea.responsable = responsable.value ? responsable.value : "Sin responsable";
+    tarea.subTareas = [];
+    const divSubtareas = document.querySelectorAll(".subtarea");
+    let contador = 0;
+    if (divSubtareas.length > 0) {
+        divSubtareas.forEach(function (subtarea) {
+            let subTarea = {};
+            const id = divSubtareas[ contador ].getAttribute("id");
+            console.log(id);
+            contador++;
+            subTarea.id = id;
+            const checkbox = subtarea.querySelector(".custom-checkbox");
+            subTarea.check = checkbox.checked ? true : false;
+            const nombreSubtarea = subtarea.querySelector(".nombre-subtarea");
+            if (nombreSubtarea.value === "") return;
+            subTarea.nombre = nombreSubtarea.value;
+            const urlSubtarea = subtarea.querySelector(".url-subtarea");
+            subTarea.url = urlSubtarea ? urlSubtarea.value : "";
+            tarea.subTareas.push(subTarea);
+        });
+    };
+    console.log(tarea);
+    crearEditarTarea(tarea);
+}
+
+
+
 //:solo rellena los campos.
-function rellenarCampos (tarea) {
+function rellenarCampos (e, iD = null) {
+    let id;
+    if (!(e instanceof MouseEvent)) {
+        id = e
+    } else {
+        id = iD;
+    }
     console.log('Rellenar campos');
+    const tarea = buscarTarea(id);
     abrirModal();
+    limpiarCampos();
     btnEliminar.classList.remove('d-none');
     document.getElementById("tarea-id").textContent = tarea.id;
     document.getElementById("tarea-fecha").textContent = 'Fecha: ' + formatearFecha(tarea.id);
+    const tareaTablero = tarea.tablero;
+    const tablero = tareaTablero.charAt(0).toUpperCase() + tareaTablero.slice(1);
+    document.getElementById("tarea-tablero").textContent = tablero;
     document.getElementById("tarea-nombre").value = tarea.nombre;
     document.getElementById("tarea-descripcion").value = tarea.descripcion;
     document.getElementById("tarea-responsable").value = tarea.responsable;
-    tareaActual.id = tarea.id;
-    tareaActual.nombre = tarea.nombre;
-    tareaActual.responsable = tarea.responsable;
-    tareaActual.fecha = tarea.fecha;
+    if (tarea.subTareas) {
+        if (tarea.subTareas.length > 0) {
+            tarea.subTareas.forEach(function (subtarea) {
+                crearEditarSubtarea(subtarea);
+            });
+        }
+    }
 }
 function eliminarTarea (e) {
     console.log('Elininar tarea');
+    console.log(e);
     e.preventDefault();
-    const respuesta = confirm(`Esta acción borrará la tarea "${ tareaActual.nombre }". ¿Deseas continuar?`);
-
+    const tareaId = document.getElementById("tarea-id").textContent;
+    const nombreTarea = document.getElementById("tarea-nombre").value;
+    const respuesta = confirm(`Esta acción borrará la tarea "${ nombreTarea }". ¿Deseas continuar?`);
     if (respuesta) {
         // Código a ejecutar si el usuario hace clic en "Aceptar"
         console.log("El usuario ha hecho clic en Aceptar.");
         console.log('desde eliminar tarea');
-        console.log(tareaActual);
-        const index = arrTareas.findIndex(t => t.id === tareaActual.id);
+        const index = buscarTarea(tareaId);
         if (index !== -1) {
             //borrada del array arrTareas
             const tareaBorrada = arrTareas.splice(index, 1);
             //borrar de localStorage
             guardarTarea();
             //borrar el div
-            const borrarTareaDiv = document.getElementById(tareaActual.id);
+            const borrarTareaDiv = document.getElementById(tareaId);
             if (borrarTareaDiv) {
                 borrarTareaDiv.remove();
-            } else {
-                console.log('no hay div que borrar');
             }
-
-            cerrarModal();
             console.log('Tarea borrada:', tareaBorrada[ 0 ]);
-        } else {
-            console.log('No se encontró la tarea:', tareaActual.id);
         }
-
-    } else {
-        // Código a ejecutar si el usuario hace clic en "Cancelar"
-        console.log("El usuario ha hecho clic en Cancelar.");
-        cerrarModal();
     }
-
 }
 
-function validarTarea () {
+function validarTarea (e) {
     const nombre = document.getElementById("tarea-nombre").value;
     console.log('validar Tarea');
     if (nombre === '') {
         alert('Debes asignar un nombre a la tarea');
     } else {
-        crearEditarTarea();
+        recogerDatos();
     }
 }
-function guardarTarea () {
+function guardarTarea (tarea = false) {
     console.log('Guardar tarea');
+
+    if (tarea) {
+        arrTareas.push(tarea);
+    }
+
+
     //guardando en local storage
-    console.log('Guardar localStorage');
     const jsonTareas = JSON.stringify(arrTareas);
     localStorage.setItem("arrTareas", jsonTareas);
-    console.log('Guardar tarea');
-    //TODO guardamos tarea sin importar si es edicion o nueva
+    cerrarModal();
 }
 function crearId () {
     return new Date().getTime();
@@ -276,38 +317,140 @@ function abrirModal () {
     $('#modalTarea').modal('show');
 }
 function cerrarModal () {
-    console.log('cerrar modal');
-    $("#modalTarea").modal("hide");
+
+    if ($("#modalTarea").is(":visible")) {
+        console.log('cerrar modal');
+        $("#modalTarea").modal("hide");
+    }
 }
 function limpiarCampos () {
     console.log('Limpiar campos');
     btnEliminar.classList.add("d-none");
-    document.getElementById("tarea-fecha").textContent = '';
     document.getElementById("tarea-nombre").value = '';
     document.getElementById("tarea-descripcion").value = '';
     document.getElementById("tarea-responsable").value = '';
-
+    const divSubtareas = document.querySelectorAll(".subtarea");
+    if (divSubtareas.length > 0) {
+        divSubtareas.forEach(function (subtarea) {
+            subtarea.remove();
+        });
+    }
 }
 
-function subtarea (e) {
+function crearEditarSubtarea (e = null, subT = null) {
+    console.log("Crear Editar subtarea");
+    let subTarea;
+
+    if (e instanceof MouseEvent) {
+        subTarea = subT;
+    } else {
+
+        subTarea = e
+    }
+    const id = subTarea ? 'sub' + subTarea.id : 'sub' + crearId();
     const divSubtarea = document.querySelector(".subtareas");
     const divRow = document.createElement("div");
-    divRow.className = "row mb-2";
-    const divCheck = document.createElement("div");
-    divCheck.className = "col-auto d-flex align-items-center ms-2 pt-1 ";
+    divRow.className = "row mb-2 d-flex align-items-center subtarea";
+    divRow.id = id;
     const divInput = document.createElement("div");
-    divInput.type = "text";
-    divInput.className = "col";
-    const check = document.createElement("input");
-    check.type = "checkbox";
-    check.className = "custom-checkbox";
+    divInput.className = "col flex-grow-1";
     const input = document.createElement("input");
     input.type = "text";
-    input.className = "form-control";
-    divCheck.appendChild(check);
+    input.className = "form-control nombre-subtarea";
+    input.placeholder = "Nombre de la subtarea";
+    if (subTarea) { input.value = subTarea.nombre; }
     divInput.appendChild(input);
+    const divCheck = document.createElement("div");
+    divCheck.className = "col-auto d-flex align-items-center";
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.className = "custom-checkbox m-2";
+    if (subTarea) {
+        if (subTarea.check) {
+            check.checked = true;
+            input.style.textDecoration = "line-through";
+        }
+    }
+    check.onclick = () => {
+        if (check.checked) {
+            input.style.textDecoration = "line-through";
+        } else {
+            input.style.textDecoration = "none";
+        }
+    }
+    divCheck.appendChild(check);
+    const btnDivUrl = document.createElement("div");
+    btnDivUrl.className = "dropdown col-auto d-flex align-items-center";
+    const btnUrl = document.createElement("button");
+    btnUrl.type = "button";
+    btnUrl.id = "btnMenuUrl";
+    btnUrl.className = "btn btn-gris dropdown-toggle";
+    btnUrl.setAttribute("data-bs-toggle", "dropdown");
+    btnUrl.setAttribute("aria-haspopup", "true");
+    btnUrl.setAttribute("aria-expanded", "false");
+    const ulDropdownMenu = document.createElement("ul");
+    ulDropdownMenu.className = "dropdown-menu custom-menu";
+    ulDropdownMenu.setAttribute("aria-labelledby", "btnMenuUrl");
+    const opciones = [
+        {
+            texto: "Crear Url",
+            accion: function () { urlSubtarea(divRow) }
+        },
+        {
+            texto: "Borrar subtarea",
+            accion: function () { borrarSubtarea(id); }
+        }
+    ];
+    opciones.forEach((opcion) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.className = "dropdown-item";
+        a.href = "#";
+        a.textContent = opcion.texto;
+        a.onclick = opcion.accion;
+        li.appendChild(a);
+        ulDropdownMenu.appendChild(li);
+    });
+    btnDivUrl.appendChild(btnUrl);
+    btnDivUrl.appendChild(ulDropdownMenu);
+    btnDivUrl.appendChild(btnUrl);
     divRow.appendChild(divCheck);
     divRow.appendChild(divInput);
+    divRow.appendChild(btnDivUrl);
     divSubtarea.appendChild(divRow);
+    if (subTarea && subTarea.url) {
+        urlSubtarea(divRow, subTarea.url);
+    }
+}
 
+function borrarSubtarea (id) {
+    console.log('borrarSubtarea ' + id);
+    const divSubtarea = document.getElementById(id);
+    divSubtarea.remove();
+}
+
+function urlSubtarea (e, div = null, urL = null) {
+    console.log(' url Subtarea')
+    let url;
+    let divSubtarea
+    if (!(e instanceof MouseEvent)) {
+        url = div ? div : null;
+        divSubtarea = e;
+    } else {
+        url = urL;
+        divSubtarea = div;
+    }
+    const divInputUrl = document.createElement("div");
+    divInputUrl.className = "col-12 mt-1";
+    const inputUrl = document.createElement("input");
+    inputUrl.type = "text";
+    inputUrl.className = "form-control url-subtarea";
+    inputUrl.placeholder = "Ingresa la URL";
+    if (url) { inputUrl.value = url; }
+    divInputUrl.appendChild(inputUrl);
+    divSubtarea.appendChild(divInputUrl);
+}
+function buscarTarea (id) {
+    const tarea = arrTareas.find(t => String(t.id) === String(id));
+    return tarea;
 }

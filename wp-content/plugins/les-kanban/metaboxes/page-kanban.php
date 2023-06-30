@@ -37,9 +37,10 @@ $titulo = get_the_title();
         <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-body">
-                    <!-- //? Fecha-->
+                    <!-- //? Fecha Tablero  ID-->
                     <div class="row ">
                         <p class="col" id="tarea-fecha">Tarea</p>
+                        <p class="col text-center" id="tarea-tablero">Tablero</p>
                         <p class="col text-end" id="tarea-id">Tarea</p>
                     </div>
                     <!-- //? Nombre Tarea-->
@@ -51,7 +52,7 @@ $titulo = get_the_title();
                             </svg>
                         </div>
                         <div class="col">
-                            <input type="text" id="tarea-nombre" autocomplete="off" class="form-control" placeholder="Nombre Tarea">
+                            <input type="text" id="tarea-nombre" autocomplete="off" class="form-control" placeholder="Nombre de la tarea">
                         </div>
                     </div>
                     <!-- //? Descripción-->
@@ -63,7 +64,7 @@ $titulo = get_the_title();
                                     </svg></span>Descripción</label>
                         </div>
                         <div class="col-12">
-                            <input type="text" id="tarea-descripcion" class="w-100 form-control" rows="4"></input>
+                            <input type="text" id="tarea-descripcion" class="w-100 form-control" placeholder="Descripción de la tarea"></input>
                         </div>
                     </div>
                     <!-- //? Responsable-->
@@ -75,16 +76,16 @@ $titulo = get_the_title();
                                     </svg></span>Responsable</label>
                         </div>
                         <div class="col-12">
-                            <input type="text" id="tarea-responsable" autocomplete="off" class="form-control">
+                            <input type="text" id="tarea-responsable" autocomplete="off" class="form-control" placeholder="Responsable de la tarea">
                         </div>
                     </div>
                     <!-- //? Subtareas *******************************************-->
                     <div class="row">
                         <!-- //? Titulo subtareas-->
-                        <div class="col-12">
+                        <div class="col-12 mb-1">
                             <label for="tarea-responsable" class="strong-input pe-2"><span><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-subtract pe-2" viewBox="0 0 16 16">
                                         <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z" />
-                                    </svg></span>Subtareas</label>
+                                    </svg></span>Check de Subtareas</label>
                         </div>
                         <!-- //? Div para añadir subtareas-->
                         <div class="col-12 subtareas">
@@ -92,7 +93,7 @@ $titulo = get_the_title();
                         </div>
                         <!-- //? Boton añadir subtarea-->
                         <div class="col">
-                            <button type="button" class="btn-gris mt-2" onclick="subtarea(event)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-node-plus pe-2" viewBox="0 0 16 16">
+                            <button type="button" id="btn-sub-tarea" class="btn-gris mt-2" onclick="crearEditarSubtarea(event)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-node-plus pe-2" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M11 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM6.025 7.5a5 5 0 1 1 0 1H4A1.5 1.5 0 0 1 2.5 10h-1A1.5 1.5 0 0 1 0 8.5v-1A1.5 1.5 0 0 1 1.5 6h1A1.5 1.5 0 0 1 4 7.5h2.025zM11 5a.5.5 0 0 1 .5.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2A.5.5 0 0 1 11 5zM1.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z" />
                                 </svg>Añadir subtarea...</button>
                         </div>
@@ -102,7 +103,7 @@ $titulo = get_the_title();
                 <div class="modal-footer">
                     <button type="button" class="btn-gris" onclick="cerrarModal(event)">Cancelar</button>
                     <button type="button" id="btn-eliminar" class="btn-gris d-none" onclick="eliminarTarea(event)">Eliminar</button>
-                    <input class="btn-gris" id="btn-crear-editar" type="button" value="Guardar Tarea" onclick="validarTarea(event)" />
+                    <input class="btn-gris" id="btn-guardar-tarea" type="button" value="Guardar Tarea" onclick="validarTarea(event)" />
                 </div>
             </div>
         </div>
