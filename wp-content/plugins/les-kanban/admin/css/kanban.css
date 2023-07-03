@@ -245,3 +245,25 @@
     border-radius: 0.5rem;
     padding: 0.5rem;
 }
+
+.text-overflow-ellipsis {
+    white-space: nowrap;
+    /* Evita que el texto se envuelva a la siguiente línea */
+    overflow: hidden;
+    /* Oculta el contenido que se desborda */
+    text-overflow: ellipsis;
+    /* Agrega puntos suspensivos (...) al final del texto que se desborda */
+}
+.enlace{
+    color: black;
+    background-color: #d1b648;
+    padding: 0 0.5rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    margin: 0;
+}
+.enlace:hover{
+    cursor: pointer;
+    color: #e70;
+    background-color: var(--fondo-modal);
+}

@@ -6,6 +6,7 @@
 $titulo = get_the_title();
 
 
+
 ?>
 <div class="contendorAjax">
     <?php
@@ -52,7 +53,7 @@ $titulo = get_the_title();
                             </svg>
                         </div>
                         <div class="col">
-                            <input type="text" id="tarea-nombre" autocomplete="off" class="form-control" placeholder="Nombre de la tarea">
+                            <textarea type="text" id="tarea-nombre" autocomplete="off" class="form-control" placeholder="Nombre de la tarea"></textarea>
                         </div>
                     </div>
                     <!-- //? Descripción-->
@@ -64,7 +65,7 @@ $titulo = get_the_title();
                                     </svg></span>Descripción</label>
                         </div>
                         <div class="col-12">
-                            <input type="text" id="tarea-descripcion" class="w-100 form-control" placeholder="Descripción de la tarea"></input>
+                            <textarea id="tarea-descripcion" class="w-100 form-control rows-4" placeholder="Descripción de la tarea"></textarea>
                         </div>
                     </div>
                     <!-- //? Responsable-->

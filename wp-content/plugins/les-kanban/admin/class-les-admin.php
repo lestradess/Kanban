@@ -9,16 +9,16 @@
  */
 class LES_Admin
 {
-    private $plugin_name;//El identificador único de este plugin
-    private $version;//Version actual del plugin
+    private $plugin_name; //El identificador único de este plugin
+    private $version; //Version actual del plugin
     private $plugin_dir_path;
     private $plugin_dir_url;
     private $plugin_dir_url_dir;
     private $build_menupage; //Para crear un nuevo menu en la administración
     private $db; //Para utilizar los metodos de consultas sql de wordpress
-    private $crud_json;//Objeto NEW_CRUD_JSON
+    private $crud_json; //Objeto NEW_CRUD_JSON
 
-    public function __construct($plugin_name,$version)
+    public function __construct($plugin_name, $version)
     {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
@@ -55,13 +55,16 @@ class LES_Admin
             'all', //dispositivo que queremos que se visualice
         );
         //?Encolando kamban.css
-        wp_enqueue_style(
-            'admin-style-kanban',
-            plugin_dir_url(__DIR__) . 'admin/css/kanban.css',
-            [], //aquí encolamos lo que queremos que se encole primero
-            '1.0.0',
-            'all', //dispositivo que queremos que se visualice
-        );
+        $screen = get_current_screen();
+        if ($screen->id === 'les_kanban') {
+            wp_enqueue_style(
+                'admin-style-kanban',
+                plugin_dir_url(__DIR__) . 'admin/css/kanban.css',
+                [], //aquí encolamos lo que queremos que se encole primero
+                '1.0.0',
+                'all', //dispositivo que queremos que se visualice
+            );
+        }
         //?Encolando fuente noto sand
         wp_enqueue_style('noto', 'https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&family=Noto+Sans:wght@100;300;700&display=swap');
     }
@@ -84,14 +87,17 @@ class LES_Admin
             '1.0.0',
             false //donde queremos encolar en el head/false al final del body/true
         );
-        //?Encolando kanban.js
-        wp_enqueue_script(
-            'admin-script-kanban',
-            plugin_dir_url(__DIR__) . 'admin/js/kanban.js',
-            ['jquery', 'bootstrap-bundle'], //aquí encolamos lo que queremos que se encole primero
-            '1.0.0',
-            false //donde queremos encolar en el head/false al final del body/true
-        );
+        $screen = get_current_screen();
+        if ($screen->id === 'les_kanban') {
+            //?Encolando kanban.js
+            wp_enqueue_script(
+                'admin-script-kanban',
+                plugin_dir_url(__DIR__) . 'admin/js/kanban.js',
+                ['jquery', 'bootstrap-bundle'], //aquí encolamos lo que queremos que se encole primero
+                '1.0.0',
+                false //donde queremos encolar en el head/false al final del body/true
+            );
+        }
 
         //?Encolando Bootstrap desde CDN
         wp_enqueue_script('bootstrap-bundle', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js', array('jquery'), '5.3.0-alpha3', true);
@@ -111,7 +117,7 @@ class LES_Admin
             'lesdata',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
-                'seguridad' => wp_create_nonce( 'lesdata_seg' )
+                'seguridad' => wp_create_nonce('lesdata_seg')
             ]
         );
     }

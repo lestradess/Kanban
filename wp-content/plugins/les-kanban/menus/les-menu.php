@@ -30,6 +30,12 @@ if (!function_exists('les_menu_page_display')) {
     {
 ?>
         <!--html-->
+        <?php
+        $screen = get_current_screen();
+        $screen_name = $screen->id;
+        echo $screen_name;
+
+        ?>
         <div class="wrap">
             <form action="" method="post">
                 <input type="text" placeholder="Nombre" name="nombre" id="nombre">

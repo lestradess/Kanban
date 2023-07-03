@@ -1,7 +1,7 @@
 "use strict";
 //:VARIABLES**************************
 $ = jQuery.noConflict();
-
+const nombrePagina = document.title;
 let arrTareas = [];
 let arrSubtareas = [];
 let btnEliminar;
@@ -15,7 +15,7 @@ let objTableros = {
 //Si LocalStorage está definido
 if (typeof localStorage !== 'undefined') {
     console.log('LocalStorage definido');
-    const jsonArray = localStorage.getItem("arrTareas");
+    const jsonArray = localStorage.getItem(nombrePagina);
     try {
         if (jsonArray) {
             arrTareas = JSON.parse(jsonArray);
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ui.item.addClass("task-dragging");
                 const tablero = ui.item.parent().attr("id");
                 console.log(`cojo del tablero ${ tablero }`);
-                tableros(tablero,-1);
+                tableros(tablero, -1);
             },
             stop: function (event, ui) {
                 ui.item.removeClass("task-dragging");
@@ -72,10 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const tarea = buscarTarea(id);
                 if (tarea) {
                     const tablero = ui.item.parent().attr("id");
-                    console.log(`pongo la tarea ${ tarea.nombre } en el tablero ${ tablero }`);                
+                    console.log(`pongo la tarea ${ tarea.nombre } en el tablero ${ tablero }`);
                     tarea.tablero = tablero;
                     tableros(tablero, 1);
-                    guardarTarea();
                 }
             }
         });
@@ -105,18 +104,20 @@ function nuevaTarea (e) {
 
 function crearDivTarea (id) {
     console.log('Crear Div Tarea');
+    let suma;
     const buscarDivTarea = document.getElementById(id);
     if (buscarDivTarea) {
         buscarDivTarea.remove();
+        suma = 0;
+    } else {
+        suma = 1;
     }
     const tarea = buscarTarea(id);
-    console.log(tarea);
-    console.log(tarea.subTareas);
     const tableroId = tarea.tablero.toLowerCase();
     const tablero = document.getElementById(tableroId);
 
     const divTarea = document.createElement('div');
-    divTarea.className = 'tarea p-0 row task';
+    divTarea.className = 'tarea p-0 row task position-relative';
     divTarea.setAttribute('id', tarea.id);
     divTarea.setAttribute('draggable', true);
     divTarea.setAttribute('ondragstart', 'drag(event)');
@@ -133,45 +134,60 @@ function crearDivTarea (id) {
     divTarea.appendChild(pNombre);
 
     const posicion = document.createElement('p');
-    posicion.className = 'col';
+    posicion.className = 'col posicion p-0 m-0 d-none ';
     posicion.textContent = tarea.posicion;
     divTarea.appendChild(posicion);
 
     const divCheck = document.createElement("div");
+    divCheck.className = "m-0 p-0";
     if (tarea.subTareas) {
         if (tarea.subTareas.length > 0) {
             const subtareas = tarea.subTareas;
             subtareas.forEach(function (subtarea) {
-                console.log(subtarea);
                 const subtareaP = document.createElement("p");
+                subtareaP.className = "text-overflow-ellipsis";
                 const subtareaText = document.createElement("span");
                 subtareaText.textContent = subtarea.nombre;
                 const checkSpan = document.createElement("span");
                 const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-                svgElement.setAttribute("width", "32");
-                svgElement.setAttribute("height", "32");
-                svgElement.setAttribute("fill", "currentColor");
-                svgElement.setAttribute("class", "bi bi-check2");
+                svgElement.setAttribute("width", "25");
+                svgElement.setAttribute("height", "25");
                 svgElement.setAttribute("viewBox", "0 0 16 16");
-                const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                pathElement.setAttribute("d", "M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0");
-                pathElement.setAttribute("fill", "transparent");
+                let pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");;
                 if (subtarea.check) {
+                    svgElement.setAttribute("class", "bi bi-check2-circle me-1");
+                    pathElement.setAttribute("d", "M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0");
                     subtareaText.classList.add('text-decoration-line-through');
-                    pathElement.setAttribute("fill", "#3582c4");
+                    pathElement.setAttribute("fill", "#50af3c");
+                } else {
+                    svgElement.setAttribute("width", "20");
+                    svgElement.setAttribute("height", "20");
+                    svgElement.setAttribute("class", "bi bi-circle me-2");
+                    pathElement.setAttribute("fill", "#ca4552");
+                    pathElement.setAttribute("d", "M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z");
                 }
                 svgElement.appendChild(pathElement);
                 checkSpan.appendChild(svgElement);
                 subtareaP.appendChild(checkSpan);
-                subtareaP.appendChild(subtareaText);
+                if (subtarea.url) {
+                    subtareaP.appendChild(subtareaText);
+                    subtareaText.classList.add("enlace");
+                    subtareaText.onclick = (e) => {
+                        e.stopPropagation();
+                        window.open(subtarea.url);
+                    }
+                } else {
+                    subtareaP.appendChild(subtareaText);
+                    subtareaP.classList.remove("enlace");
+                }
                 divCheck.appendChild(subtareaP);
             });
         }
     }
     divTarea.appendChild(divCheck);
     tablero.appendChild(divTarea);
-    tableros(tableroId, 1);
+    tableros(tableroId, suma);
 }
 
 //:Funcion de creacción de tarea dentro del modal********
@@ -306,11 +322,9 @@ function guardarTarea (tarea = false) {
     if (tarea) {
         arrTareas.push(tarea);
     }
-
-
     //guardando en local storage
     const jsonTareas = JSON.stringify(arrTareas);
-    localStorage.setItem("arrTareas", jsonTareas);
+    localStorage.setItem(nombrePagina, jsonTareas);
     cerrarModal();
 }
 function crearId () {
@@ -473,15 +487,25 @@ function buscarTarea (id) {
 function tableros (tableroid, suma) {
     console.log('Tablero')
     const tablero = document.getElementById(tableroid);
-    console.log(tablero)
-    const nomTablero = tableroid;
-    console.log(nomTablero)
     const cant = tablero.querySelector(".nTareas");
-    console.log(cant.innerHTML)
     if (suma > 0) {
-        objTableros[ nomTablero ]++;
-    }else{
-        objTableros[ nomTablero ]--;
-    } 
-    cant.innerHTML = objTableros[ nomTablero ];
+        objTableros[ tableroid ]++;
+        const nTareas = tablero.querySelectorAll(".tarea");
+        let contador = 0;
+        nTareas.forEach(e => {
+            contador++;
+            const id = e.id;
+            const tarea = buscarTarea(id);
+            tarea.posicion = contador;
+            const divTarea = document.getElementById(id);
+            divTarea.querySelector('.posicion').innerHTML = contador;
+        });
+    } else if (suma < 0) {
+        objTableros[ tableroid ]--;
+    }
+    cant.innerHTML = objTableros[ tableroid ];
+    arrTareas.sort(function (a, b) {
+        return a.posicion - b.posicion;
+    });
+    guardarTarea();
 }
