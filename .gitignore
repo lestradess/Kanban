@@ -28,3 +28,4 @@ wp-includes/
 *.zip
 /wp-content/plugins/les-kanban/aborrar
 /nbproject/private/
+.xdp*

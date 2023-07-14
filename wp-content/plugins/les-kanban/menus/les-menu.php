@@ -34,6 +34,7 @@ if (!function_exists('les_menu_page_display')) {
         $screen = get_current_screen();
         $screen_name = $screen->id;
         echo $screen_name;
+        
 
         ?>
         <div class="wrap">

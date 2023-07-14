@@ -19,7 +19,7 @@ function les_kanban_post_type()
         'add_new_item'          => __('Agregar Tablero Kanban', 'les-kanban'),
         'add_new'               => __('Agregar Tablero Kanban', 'les-kanban'),
         'new_item'              => __('Nueva Tablero Kanban', 'les-kanban'),
-        'edit_item'             => __('Editar Tablero Kanban', 'les-kanban'),
+        'edit_item'             => __('Editar Tablero', 'les-kanban'),
         'update_item'           => __('Actualizar Tablero Kanban', 'les-kanban'),
         'view_item'             => __('Ver Tablero Kanban', 'les-kanban'),
         'view_items'            => __('Ver Tableros Kanban', 'les-kanban'),
@@ -61,21 +61,26 @@ function les_kanban_post_type()
 add_action('init', 'les_kanban_post_type', 0);
 
 
-function ocultar_cuadro_publicar()
+function ocultar_contenido()
 {
     global $post;
 
     // Verificar si estamos en la pantalla de edición del Custom Post Type
     if ($post->post_type === 'les_kanban') {
         // Ocultar el cuadro de publicar
-        echo '<style>#submitdiv { display: none; }</style>';
+        //echo '<style>#submitdiv { display: none; }</style>';
+        echo '<style>#screen-meta-links { display: none; }</style>';
+        echo '<style>.wp-heading-inline{ display: none; }</style>';
+        echo '<style>.page-title-action{ display: none; }</style>';
+        echo '<style>.wp-heading-inline{ display: none; }</style>';
     }
 }
-add_action('admin_head-post.php', 'ocultar_cuadro_publicar');
-add_action('admin_head-post-new.php', 'ocultar_cuadro_publicar');
+add_action('admin_head-post.php', 'ocultar_contenido');
+add_action('admin_head-post-new.php', 'ocultar_contenido');
 
 
-function ocultar_columna_secundaria()
+
+/* function ocultar_columna_secundaria()
 {
     global $post;
 
@@ -90,19 +95,17 @@ function ocultar_columna_secundaria()
     }
 }
 add_action('admin_footer-post.php', 'ocultar_columna_secundaria');
-add_action('admin_footer-post-new.php', 'ocultar_columna_secundaria');
+add_action('admin_footer-post-new.php', 'ocultar_columna_secundaria'); */
 
 /* function add_save_button_after_title()
 {
     global $post;
     if ($post->post_type === 'les_kanban') {
-        echo '<script>
-            jQuery(document).ready(function($){
-                // Buscar el contenedor del título y agregar el botón de guardar
-                var titleContainer = $("#titlediv");
-                titleContainer.append("<button class=\'button button-primary\' id=\'save-post-button\' type=\'submit\'>Actualizar</button>");
-            });
-        </script>';
+        $button_value = ($post->post_status === 'auto-draft') ? 'Publicar' : 'Actualizar';
+        $button_name = ($post->post_status === 'auto-draft') ? 'publish' : 'save';
+?>
+        <input id="btnSubmit" type="submit" name="<?php echo $button_name; ?>" id="<?php echo $button_name; ?>" class="button button-primary button-large" value="<?php echo $button_value; ?>">
+<?php
     }
 }
 add_action('edit_form_after_title', 'add_save_button_after_title'); */
@@ -110,5 +113,4 @@ add_action('edit_form_after_title', 'add_save_button_after_title'); */
 
 //?METABOX KANBAN
 require_once(dirname(dirname(__FILE__)) . '/metaboxes/mtb-kanban.php');
-
-
+//require_once(dirname(dirname(__FILE__)) . '/metaboxes/page-kanban.php');

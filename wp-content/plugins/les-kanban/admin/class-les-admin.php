@@ -93,10 +93,17 @@ class LES_Admin
             wp_enqueue_script(
                 'admin-script-kanban',
                 plugin_dir_url(__DIR__) . 'admin/js/kanban.js',
-                ['jquery', 'bootstrap-bundle'], //aquí encolamos lo que queremos que se encole primero
+                ['jquery', 'bootstrap-bundle', 'admin-script-sortable'], //aquí encolamos lo que queremos que se encole primero
                 '1.0.0',
-                false //donde queremos encolar en el head/false al final del body/true
+                true //donde queremos encolar en el head/false al final del body/true
             );
+            wp_enqueue_script(
+                'admin-script-sortable',
+                plugin_dir_url(__DIR__) . 'helpers/Sortable.js',
+                ['bootstrap-bundle'], //aquí encolamos lo que queremos que se encole primero
+                '1.0.0',
+                true //donde queremos encolar en el head/false al final del body/true
+            );   
         }
 
         //?Encolando Bootstrap desde CDN
@@ -127,30 +134,56 @@ class LES_Admin
      */
     public function ajax_crud_table()
     {
-        //validamos el nonce
-        check_ajax_referer('lesdata_seg', 'nonce');
-        //validamos las capacidades de usuario
-        if (current_user_can('manage_options')) {
-
+        check_ajax_referer('lesdata_seg', 'nonce'); //validamos el nonce       
+        if (current_user_can('manage_options')) { //validamos las capacidades de usuario
             extract($_POST, EXTR_OVERWRITE);
-
             if ($tipo == 'add') {
-
                 $columns = [
                     'nombre' => $nombre,
                     'data' => ''
                 ];
-
                 $result = $this->db->insert(LES_TABLE, $columns);
-
                 $json = json_encode([
                     'result'    => $result,
                     'nombre'    => $nombre,
                     'insert_id' => $this->db->insert_id
                 ]);
             }
-
             echo $json;
+            wp_die();
+        }
+    }
+    public function ajax_crud_table_kanban()
+    {
+        check_ajax_referer('lesdata_seg', 'nonce'); //validamos el nonce       
+        if (current_user_can('manage_options')) { //validamos las capacidades de usuario
+            extract($_POST, EXTR_OVERWRITE);
+            if ($tipo == 'add') {
+                $columns = [
+                    'id'        => $id,
+                    'fecha'     => $fecha,
+                    'nombre'    => $nombre,
+                    'descripcion' => $descripcion,
+                    'responsable' => $responsable,
+                    'tablero'   => $tablero,
+                    'posicion'  => $posicion,
+                    'subtareas' => $subtareas
+                ];
+                $result = $this->db->insert(LES_TABLE_KANBAN, $columns);
+                $json = json_encode([
+                    'result'    => $result,
+                    'id'        => $id,
+                    'fecha'     => $fecha,
+                    'nombre'    => $nombre,
+                    'descripcion' => $descripcion,
+                    'responsable' => $responsable,
+                    'tablero'   => $tablero,
+                    'posicion'  => $posicion,
+                    'subtareas' => $subtareas
+                ]);
+            }
+/*             echo($json); */
+            wp_send_json($json);
             wp_die();
         }
     }

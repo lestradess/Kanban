@@ -26,10 +26,15 @@ class LES_Activator
         //Ejecutamos la consulta.
         $wpdb->query($sql);
 
-        $sqlKanban = "CREATE TABLE IF NOT EXISTS " . LES_TABLE . " (
-				id int(9) NOT NULL AUTO_INCREMENT, 
+        $sqlKanban = "CREATE TABLE IF NOT EXISTS " . LES_TABLE_KANBAN . " (
+				id varchar(13) NOT NULL, 
+        fecha varchar(70),
 				nombre varchar(70) NOT NULL, 
-				data longtext NOT NULL, 
+        descripcion varchar(255),
+        responsable varchar(70),
+        tablero varchar(70),
+        posicion int(9),
+				subtareas longtext, 
 				PRIMARY KEY (id) 
 			);	
 			";

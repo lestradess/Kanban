@@ -45,7 +45,7 @@ class LES_Master
         require_once $this->plugin_dir_path_dir . 'admin/class-les-admin.php'; //Administracion zona admin
         require_once $this->plugin_dir_path_dir . 'post-types/cpt-kanban.php'; //cpt kanban
         require_once $this->plugin_dir_path_dir . 'menus/les-menu.php';
-        require_once $this->pluggin_dir_path . 'class-les-ajax.php';
+        //require_once $this->pluggin_dir_path . 'class-les-ajax.php';
     }
     private function cargar_instancias()
     {
@@ -66,8 +66,11 @@ class LES_Master
         $this->cargador->add_action('admin_enqueue_scripts', $this->les_admin, 'enqueue_scripts');
         //Metodo Ajax:://Archivo class-les-ajax
         $this->cargador->add_action('wp_ajax_ajax_menu_opciones', $this->ajax, 'ajax_menu_opciones');
-        //Método Ajax para enviar datos:://Archivo class-les-ajax
+        //Método Ajax para enviar datos en pruebas:://Archivo class-les-ajax
         $this->cargador->add_action('wp_ajax_les_crud_table', $this->les_admin, 'ajax_crud_table');
+        //Metodo mio kanban
+        $this->cargador->add_action('wp_ajax_crud_table_kanban', $this->les_admin, 'ajax_crud_table_kanban');
+
     }
 
     /**
